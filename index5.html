@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>layout</title>
+</head>
+<style>
+    body{
+        background-image: url(imageS.jpg);
+       
+    }
+</style>
+<body>
+    <fieldset>
+     
+        <legend align="center"><h3 style="color:Tomato;">this is a form</h3> </legend>
+    <form action="index.html" method="post" >
+        <label align="center"><h3 style="color:Tomato;">name</h3></label><input  type="text" name="fname" placeholder="enter your name" required ><br><br>
+        <label align="center"><h3 style="color:Tomato;">email</h3></label><input type="text" name="email" placeholder="enter email" required><br><br>
+        <label align="center"><h3 style="color:Tomato;">password</h3></label><input type="password" name="password" placeholder="enter password" required><br><br>
+        <label align="center"><h3 style="color:Tomato;">gender</h3></label><input type="radio" name="gender" value="male"><label style="color:Tomato;">male</label><input type="radio" name="gender" value="female"><label style="color:Tomato;">female</label><input type="radio" name="gender" value="other"><label style="color:Tomato;">other</label> <br><br>
+       <label align="center"><h3 style="color:Tomato;">description</h3></label> <textarea rows="4" cols="50" name="description" placeholder="enter your description"></textarea><br><br>
+       <label align="center"><h3 style="color:Tomato;">country</h3></label> <select name="country" size="2" multiple>
+            <option value="us">United States</option>
+            <option value="ca">Canada</option>
+            <option value="uk">United Kingdom</option>
+            <option value="au">Australia</option>
+        </select><br><br>
+        <label><h3 style="color:Tomato;">cars</h3></label><select name="cars" id="cars">
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="mercedes">Mercedes</option>
+            <option value="audi">Audi</option>
+            </select><br><br>
+            <label> <h3 style="color:Tomato;">cars</h3></label> <select>
+                <optgroup label="Swedish Cars">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                </optgroup>
+                <optgroup label="German Cars">
+                    <option value="mercedes">swift</option>
+                    <option value="audi">unknown</option>
+                </optgroup>
+            </select><br><br>
+            <label><h3 style="color:Tomato;">cars</h3></label><input list="cars">
+            <datalist id="cars">
+                <option value="volvo">
+                <option value="saab">
+                <option value="mercedes">
+                <option value="audi">
+            </datalist> <br><br>
+            <label><h3 style="color:Tomato;">upload file</h3></label><input type="file" accept="image/*" name="uploadfile">
+       </fieldset>
+       </form>
+        
+    
+</body>
+</html>

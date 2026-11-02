@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Color Changer</title>
+    <style>
+        *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #121317;
+}
+.container{
+    background-color: #202229;
+    width: 18.75em;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    padding: 3em;
+    }
+
+
+#result-box{
+    height: 0px;
+    width: 0px;
+    box-shadow: 0 0 0 10px #202229;
+    border-radius: 1em;
+    margin-bottom: 2em;
+}
+#input-box{
+    width: 100%;
+    padding: 1em;
+    border: none;
+    outline: none;
+    border-radius: 0.5em;
+    font-family: sans-serif;
+    color: black;
+    background-color: #ffffff;
+    font-weight: 600;
+}
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <div id="result-box"></div>
+        <input type="text" id="input-box" value="black">
+    </div>
+    
+    
+</body>
+   <script>
+
+        const inputBox = document.getElementById("input-box");
+        const resultBox = document.getElementById("result-box");
+
+        inputBox.addEventListener("input", function() {
+            const colorValue = inputBox.value;
+            resultBox.style.backgroundColor = colorValue;
+            document.body.style.backgroundColor = colorValue;
+            inputBox.style.color = colorValue;
+            inputBox.style.caretColor = colorValue;
+        });
+    
+   </script>
+</html>

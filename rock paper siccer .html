@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rock Paper Scissors</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      font-family: Arial, sans-serif;
+      color: #e2e8f0;
+    }
+
+    .game {
+      width: min(90vw, 500px);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .scoreboard {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    button {
+      background: #38bdf8;
+      color: #082f49;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #7dd3fc;
+      transform: translateY(-2px);
+    }
+
+    .result {
+      margin-top: 18px;
+      font-size: 1.2rem;
+      min-height: 30px;
+      font-weight: bold;
+    }
+
+    .choice {
+      margin-top: 12px;
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="game">
+    <h1>Rock Paper Scissors</h1>
+
+    <div class="scoreboard">
+      <div>You: <span id="user-score">0</span></div>
+      <div>Computer: <span id="computer-score">0</span></div>
+    </div>
+
+    <div class="buttons">
+      <button data-choice="rock">Rock</button>
+      <button data-choice="paper">Paper</button>
+      <button data-choice="scissors">Scissors</button>
+    </div>
+
+    <div class="choice">Your choice: <span id="user-choice">-</span></div>
+    <div class="choice">Computer choice: <span id="computer-choice">-</span></div>
+
+    <div id="result" class="result">Make your move!</div>
+  </div>
+
+  <script>
+    const choices = ["rock", "paper", "scissors"];
+    const userScoreEl = document.getElementById("user-score");
+    const computerScoreEl = document.getElementById("computer-score");
+    const userChoiceEl = document.getElementById("user-choice");
+    const computerChoiceEl = document.getElementById("computer-choice");
+    const resultEl = document.getElementById("result");
+
+    let userScore = 0;
+    let computerScore = 0;
+
+    document.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const userChoice = button.dataset.choice;
+        const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+
+        userChoiceEl.textContent = userChoice;
+        computerChoiceEl.textContent = computerChoice;
+
+        if (userChoice === computerChoice) {
+          resultEl.textContent = "It's a tie!";
+        } else if (
+          (userChoice === "rock" && computerChoice === "scissors") ||
+          (userChoice === "paper" && computerChoice === "rock") ||
+          (userChoice === "scissors" && computerChoice === "paper")
+        ) {
+          userScore++;
+          userScoreEl.textContent = userScore;
+          resultEl.textContent = "You win!";
+        } else {
+          computerScore++;
+          computerScoreEl.textContent = computerScore;
+          resultEl.textContent = "Computer wins!";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>I’m sorry</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500&display=swap">
+<style>
+:root{--plum:#2b1033;--plum2:#3d1747;--blush:#ffd6e0;--rose:#ff4f7b;--lilac:#c9a8ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:radial-gradient(120% 80% at 50% 0%,var(--plum2),var(--plum) 70%);color:var(--blush);font-family:'DM Sans',system-ui,sans-serif;overflow-x:hidden}
+main{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 26px;text-align:center;position:relative}
+h1{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(46px,13vw,84px);line-height:1.02;margin:0 0 18px;letter-spacing:-.01em}
+h1 em{color:var(--rose)}
+p{font-size:18px;line-height:1.55;max-width:34ch;margin:0 auto 14px;color:#f3c9d6}
+.row{display:flex;gap:16px;justify-content:center;align-items:center;margin-top:26px;min-height:64px}
+button{font:inherit;font-weight:500;font-size:19px;border:0;border-radius:999px;padding:16px 30px;cursor:pointer;touch-action:manipulation}
+#yes{background:var(--rose);color:#fff;box-shadow:0 10px 30px -8px var(--rose);transition:transform .2s}
+#yes:active{transform:scale(.96)}
+#no{background:transparent;color:var(--blush);border:1.5px solid rgba(255,214,224,.45);transition:left .25s,top .25s,transform .25s}
+#no.run{position:fixed;z-index:5}
+button:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.letter{display:none;max-width:38ch;text-align:left}
+.letter h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(38px,10vw,56px);margin:0 0 16px;text-align:center}
+.letter p{font-size:19px;max-width:none;margin:0 0 16px;color:#ffe6ec}
+.letter .sig{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:30px;color:var(--rose);margin-top:26px}
+.done #ask{display:none}.done .letter{display:block}
+.heart{position:fixed;pointer-events:none;font-size:26px;color:var(--rose);animation:up 2.4s ease-out forwards;z-index:9}
+@keyframes up{from{transform:translateY(0) scale(.6);opacity:1}to{transform:translateY(-70vh) scale(1.3);opacity:0}}
+@media (prefers-reduced-motion:reduce){.heart{display:none}#no{transition:none}}
+
+.flowers{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.fl{position:absolute;opacity:.5;animation:sway var(--d,9s) ease-in-out infinite alternate}
+.fl.bloom{animation:bloom 1.1s cubic-bezier(.2,1.4,.4,1) both,sway var(--d,9s) 1.1s ease-in-out infinite alternate}
+@keyframes sway{from{transform:translateY(0) rotate(var(--r0,-8deg))}to{transform:translateY(-18px) rotate(var(--r1,10deg))}}
+@keyframes bloom{from{transform:scale(0) rotate(-90deg);opacity:0}to{transform:scale(1) rotate(0);opacity:.7}}
+main{z-index:1}
+.spark{position:fixed;pointer-events:none;z-index:9;color:#fff3b0;text-shadow:0 0 10px #ffe27a,0 0 18px var(--rose);animation:tw var(--t,1.8s) ease-out forwards}
+@keyframes tw{0%{transform:translate(0,0) scale(0) rotate(0);opacity:0}25%{opacity:1;transform:translate(0,0) scale(1) rotate(60deg)}100%{transform:translate(var(--dx,0),var(--dy,40px)) scale(.2) rotate(240deg);opacity:0}}
+#music{position:fixed;right:16px;top:calc(14px + env(safe-area-inset-top,0px));z-index:10;display:none;background:rgba(255,214,224,.14);color:var(--blush);padding:10px 16px;font-size:15px}
+.done #music{display:block}
+@media (prefers-reduced-motion:reduce){.fl,.fl.bloom{animation:none}.spark{display:none}}
+</style>
+</head>
+<body>
+<div class="flowers" id="flowers" aria-hidden="true"></div>
+<button id="music" type="button" aria-pressed="true">♪ music on</button>
+<main id="app">
+  <section id="ask">
+    <h1>I forgot.<br><em>I’m so sorry.</em></h1>
+    <p>Our anniversary mattered, and I let it slip by. Before anything else, can I ask you one thing?</p>
+    <p style="color:var(--blush);font-size:22px;margin-top:22px">Will you forgive me?</p>
+    <div class="row">
+      <button id="yes">Yes</button>
+      <button id="no">No</button>
+    </div>
+  </section>
+
+  <section class="letter" aria-live="polite">
+    <h2>Thank you.</h2>
+    <p>I forgot our anniversary. It wasn’t that you don’t matter. I let an ordinary day swallow something that matters a lot to us, and I know that hurt.</p>
+    <p>When we’re apart, days like that one are what hold us close. I let you down on one of them, and I’m sorry.</p>
+    <p>From now on, it’s in my calendar a week early, and I’ll plan something for us instead of leaving it to chance.</p>
+    <p>Whenever you’re ready, I’d love to call you and just listen.</p>
+    <div class="sig">Yours, always</div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var no=document.getElementById('no'), yes=document.getElementById('yes'), app=document.getElementById('app');
+  var fbox=document.getElementById('flowers'), mbtn=document.getElementById('music');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var COLS=[['#ff7aa2','#ffd6e0'],['#c9a8ff','#f1e6ff'],['#ffb3c7','#fff0f4'],['#ff4f7b','#ffd6e0']];
+  function flower(size,ci){
+    var c=COLS[ci%COLS.length], p='';
+    for(var i=0;i<6;i++) p+='<ellipse cx="50" cy="26" rx="14" ry="24" fill="'+c[0]+'" transform="rotate('+(i*60)+' 50 50)"/>';
+    return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 100 100">'+p+'<circle cx="50" cy="50" r="12" fill="#ffe27a"/><circle cx="50" cy="50" r="6" fill="'+c[1]+'" opacity=".7"/></svg>';
+  }
+  function addFlower(x,y,size,i,bloom){
+    var d=document.createElement('div'); d.className='fl'+(bloom?' bloom':'');
+    d.style.left=x+'vw'; d.style.top=y+'vh'; d.style.setProperty('--d',(7+Math.random()*6)+'s');
+    d.style.setProperty('--r0',(-12+Math.random()*10)+'deg'); d.style.setProperty('--r1',(4+Math.random()*14)+'deg');
+    d.innerHTML=flower(size,i); fbox.appendChild(d);
+  }
+  // background flowers: [left %, top %, size px]
+  var spots=[[-6,2,120],[78,-3,150],[88,30,90],[-8,38,100],[70,64,130],[6,72,150],[44,86,110],[90,86,100],[30,-6,80],[56,40,60]];
+  spots.forEach(function(s,i){addFlower(s[0],s[1],s[2],i,false)});
+
+  function sparkle(x,y,big){
+    var e=document.createElement('div'); e.className='spark'; e.textContent=Math.random()<.5?'✦':'✧';
+    e.style.left=x+'px'; e.style.top=y+'px'; e.style.fontSize=(big?16+Math.random()*22:10+Math.random()*12)+'px';
+    e.style.setProperty('--dx',(Math.random()*120-60)+'px'); e.style.setProperty('--dy',(Math.random()*90+10)+'px');
+    e.style.setProperty('--t',(1.2+Math.random()*1.2)+'s'); document.body.appendChild(e);
+    setTimeout(function(){e.remove()},2600);
+  }
+
+  /* little music box tune, played with WebAudio (original melody) */
+  var ac=null, master=null, timer=null, on=true, step=0;
+  var N={C:523.25,D:587.33,E:659.25,G:783.99,A:880,c:1046.5,B:987.77};
+  var tune=['E','G','c','G','A','G','E','D','C','E','G','E','D','E','G','A',
+            'c','A','G','E','G','A','c','B','A','G','E','D','C','D','E','C'];
+  function note(f,t,len,vol){
+    var o=ac.createOscillator(), g=ac.createGain();
+    o.type='triangle'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.01); g.gain.exponentialRampToValueAtTime(.0008,t+len);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t+len+.05);
+    var o2=ac.createOscillator(), g2=ac.createGain(); o2.type='sine'; o2.frequency.value=f*2;
+    g2.gain.setValueAtTime(0,t); g2.gain.linearRampToValueAtTime(vol*.25,t+.01); g2.gain.exponentialRampToValueAtTime(.0008,t+len*.6);
+    o2.connect(g2); g2.connect(master); o2.start(t); o2.stop(t+len);
+  }
+  function startMusic(){
+    try{
+      ac=new (window.AudioContext||window.webkitAudioContext)();
+      master=ac.createGain(); master.gain.value=.5;
+      var dl=ac.createDelay(); dl.delayTime.value=.32; var fb=ac.createGain(); fb.gain.value=.35;
+      master.connect(ac.destination); master.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(ac.destination);
+      var beat=.42, t0=ac.currentTime+.1;   // beat = seconds per note (smaller = faster)
+      (function sched(){
+        while(t0<ac.currentTime+1.2){
+          var n=tune[step%tune.length]; note(N[n],t0,1.6,.22);
+          if(step%4===0) note(N[n]/2,t0,2,.12);
+          t0+=beat; step++;
+        }
+        timer=setTimeout(sched,300);
+      })();
+    }catch(e){}
+  }
+  mbtn.addEventListener('click',function(){
+    if(!ac) return; on=!on;
+    if(on){ac.resume();} else {ac.suspend();}
+    mbtn.textContent=on?'♪ music on':'♪ music off'; mbtn.setAttribute('aria-pressed',on);
+  });
+
+  // the text the "No" button shows each time it runs away
+  var tries=0, lines=['No','Are you sure?','Really?','Please?','Last chance…','OK, just say yes'];
+  function dodge(e){
+    if(app.classList.contains('done')) return;
+    if(e&&e.preventDefault) e.preventDefault();
+    tries++; no.textContent=lines[Math.min(tries,lines.length-1)]; no.classList.add('run');
+    var w=no.offsetWidth,h=no.offsetHeight,vw=window.innerWidth,vh=window.innerHeight;
+    no.style.left=(Math.random()*(vw-w-32)+16)+'px'; no.style.top=(Math.random()*(vh-h-120)+60)+'px';
+    yes.style.transform='scale('+Math.min(1+tries*.12,1.7)+')';
+  }
+  ['pointerenter','pointerdown','focus','click'].forEach(function(ev){no.addEventListener(ev,dodge)});
+
+  yes.addEventListener('click',function(){
+    app.classList.add('done'); no.style.display='none'; window.scrollTo(0,0);
+    startMusic();
+    for(var i=0;i<14;i++) addFlower(Math.random()*95-3,Math.random()*95-3,60+Math.random()*90,i,true);
+    if(!reduce){
+      var r=yes.getBoundingClientRect();
+      for(var k=0;k<40;k++) (function(k){setTimeout(function(){sparkle(r.left+r.width/2+(Math.random()*120-60),r.top+r.height/2+(Math.random()*60-30),true)},k*25)})(k);
+      var n=0, iv=setInterval(function(){
+        for(var j=0;j<3;j++) sparkle(Math.random()*window.innerWidth,Math.random()*window.innerHeight*.9,false);
+        if(++n>200) clearInterval(iv);
+      },220);
+      for(var i=0;i<22;i++){(function(i){setTimeout(function(){
+        var h=document.createElement('div'); h.className='heart'; h.textContent='♥';
+        h.style.left=(Math.random()*92+2)+'vw'; h.style.bottom=(Math.random()*20)+'vh';
+        h.style.color=['#ff4f7b','#c9a8ff','#ffd6e0'][i%3];
+        document.body.appendChild(h); setTimeout(function(){h.remove()},2500);
+      },i*90)})(i);}
+    }
+  });
+})();
+</script>
+</body>
+</html>

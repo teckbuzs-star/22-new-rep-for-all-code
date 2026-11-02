@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script> 
+        function appenddisplay(value) {
+            document.getElementById('display').value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+
+        function calculate() {
+            var expression = document.getElementById('display').value;
+            if (expression === '') {
+                return;
+            }
+            try {
+                var result = Function('"use strict"; return (' + expression + ')')();
+                if (Number.isFinite(result)) {
+                    document.getElementById('display').value = result;
+                } else {
+                    document.getElementById('display').value = 'Error';
+                }
+            } catch (error) {
+                document.getElementById('display').value = 'Error';
+            }
+        }
+
+        function percentage() {
+            var display = document.getElementById('display');
+
+            if (display.value !== '') {
+                display.value = parseFloat(display.value) / 100;
+            }
+        }
+
+        function factorial() {
+            var display = document.getElementById('display');
+            var value = display.value.trim();
+
+            if (value === '') {
+                return;
+            }
+
+            var number = Number(value);
+            if (!Number.isInteger(number) || number < 0) {
+                display.value = 'Error';
+                return;
+            }
+
+            var result = 1;
+            for (var i = 2; i <= number; i++) {
+                result *= i;
+            }
+            display.value = result;
+        }
+    </script>
+    <style>
+        body{
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgb(152, 152, 155);
+        }
+        #calculator{
+            font-family: Arial, sans-serif;
+            background-color: rgb(0, 0, 0);
+            border-radius: auto;
+            overflow: hidden;
+            max-width: 500px;
+        }
+        #display{
+            width: 100%;
+            font-size: 30px;
+            text-align: left;
+            padding: 10px;
+            border: 2px;
+            background-color: rgb(162, 65, 65);
+        }
+        #keys{
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 26px;
+        }
+        button{
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            border-radius: 10px;
+            color: rgb(181, 170, 170);
+            color: rgb(12, 11, 11);
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+    
+
+
+
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <input  id="display" readonly>
+        <div id="keys">
+            <button onclick=" appenddisplay('+')">+</button>
+            <button onclick=" appenddisplay('7')">7</button>
+            <button onclick=" appenddisplay('8')">8</button>
+            <button onclick=" appenddisplay('9')">9</button>
+            <button onclick=" appenddisplay('-')">-</button>
+            <button onclick=" appenddisplay('4')">4</button>
+            <button onclick=" appenddisplay('5')">5</button>
+            <button onclick=" appenddisplay('6')">6</button>
+            <button onclick=" appenddisplay('*')">*</button>
+            <button onclick=" appenddisplay('1')">1</button>
+            <button onclick=" appenddisplay('2')">2</button>
+            <button onclick=" appenddisplay('3')">3</button>
+            <button onclick=" appenddisplay('/')">/</button>
+            <button onclick=" appenddisplay('0')">0</button>
+            <button onclick=" appenddisplay('.')">.</button>
+            <button onclick="percentage()">%</button>
+            <button onclick="factorial()">!</button>
+            <button onclick="calculate()">=</button>
+            <button onclick="clearDisplay()">C</button>
+        </div>
+    </div>
+
+    <script>
+        // Calculator logic will go here
+    </script>
+</body>
+</html>

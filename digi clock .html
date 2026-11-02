@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Digital Clock</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            padding: 32px 16px;
+            background: #f5f5f5;
+            color: #222;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin: 0 0 24px;
+            font-size: 28px;
+        }
+
+        main {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            background: white;
+            color: #222;
+            font: inherit;
+        }
+
+        .clock-card {
+            margin-top: 20px;
+            padding: 16px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .clock-card h2 {
+            margin: 0 0 4px;
+            font-size: 18px;
+        }
+
+        .zone,
+        .date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .time {
+            margin: 10px 0 4px;
+            font-size: clamp(32px, 8vw, 42px);
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>World clocks</h1>
+        <label for="time-zone">Choose a time zone</label>
+        <select id="time-zone"></select>
+        <section class="clock-card" aria-label="Your local time">
+            <h2>Local time</h2>
+            <div class="zone" id="local-zone"></div>
+            <div class="time" id="local-time"></div>
+            <div class="date" id="local-date"></div>
+        </section>
+        <section class="clock-card" aria-label="Selected time zone clock">
+            <h2 id="city"></h2>
+            <div class="zone" id="zone"></div>
+            <div class="time" id="time"></div>
+            <div class="date" id="date"></div>
+        </section>
+    </main>
+
+    <script>
+        const timeZones = [
+            { city: "Los Angeles", zone: "America/Los_Angeles" },
+            { city: "New York", zone: "America/New_York" },
+            { city: "London", zone: "Europe/London" },
+            { city: "Paris", zone: "Europe/Paris" },
+            { city: "Dubai", zone: "Asia/Dubai" },
+            { city: "Tokyo", zone: "Asia/Tokyo" },
+            { city: "Sydney", zone: "Australia/Sydney" }
+        ];
+
+        const timeZoneSelect = document.getElementById("time-zone");
+        const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        timeZones.forEach(({ city, zone }) => {
+            const option = document.createElement("option");
+            option.value = zone;
+            option.textContent = city;
+            timeZoneSelect.appendChild(option);
+        });
+
+        function formatTime(date, timeZone) {
+            return new Intl.DateTimeFormat("en-US", {
+                timeZone,
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true
+            }).format(date);
+        }
+
+        function formatDate(date, timeZone) {
+            return new Intl.DateTimeFormat("en-US", {
+                timeZone,
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }).format(date);
+        }
+
+        function showTime() {
+            const selectedZone = timeZoneSelect.value;
+            const { city, zone } = timeZones.find(({ zone }) => zone === selectedZone);
+            const now = new Date();
+
+            document.getElementById("local-zone").textContent = localTimeZone.replaceAll("_", " ");
+            document.getElementById("local-time").textContent = formatTime(now, localTimeZone);
+            document.getElementById("local-date").textContent = formatDate(now, localTimeZone);
+            document.getElementById("city").textContent = city;
+            document.getElementById("zone").textContent = zone.replaceAll("_", " ");
+            document.getElementById("time").textContent = formatTime(now, zone);
+            document.getElementById("date").textContent = formatDate(now, zone);
+        }
+
+        timeZoneSelect.addEventListener("change", showTime);
+        showTime();
+        setInterval(showTime, 1000);
+    </script>
+</body>
+</html>

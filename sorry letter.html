@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A letter for you</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500&display=swap">
+<style>
+:root{--plum:#2b1033;--plum2:#4a1b57;--blush:#ffd6e0;--rose:#ff4f7b;--lilac:#c9a8ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:radial-gradient(120% 80% at 50% 0%,var(--plum2),var(--plum) 70%) fixed;color:var(--blush);font-family:'DM Sans',system-ui,sans-serif;overflow-x:hidden}
+main{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 26px;text-align:center}
+h1{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(42px,12vw,72px);line-height:1.05;margin:0 0 26px}
+button{font:inherit;font-weight:500;font-size:19px;border:0;border-radius:999px;padding:16px 32px;background:var(--rose);color:#fff;cursor:pointer;box-shadow:0 10px 30px -8px var(--rose);touch-action:manipulation}
+button:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+#paper{display:none;max-width:36ch;text-align:left;padding:10px 0 80px}
+#paper h2{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(36px,10vw,50px);margin:0 0 18px;color:var(--rose)}
+#txt{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(22px,5.6vw,27px);line-height:1.5;white-space:pre-wrap;color:#ffe9ef}
+.caret{display:inline-block;width:2px;height:1em;background:var(--rose);vertical-align:-.12em;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+#sig{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:32px;color:var(--rose);margin-top:22px;opacity:0;transition:opacity 1.6s}
+#again{margin-top:26px;background:rgba(255,214,224,.14);box-shadow:none;font-size:16px;padding:12px 22px;opacity:0;pointer-events:none;transition:opacity 1s}
+.show{opacity:1!important;pointer-events:auto!important}
+#music{position:fixed;right:16px;top:calc(14px + env(safe-area-inset-top,0px));z-index:10;display:none;background:rgba(255,214,224,.14);box-shadow:none;color:var(--blush);padding:10px 16px;font-size:15px}
+#hearts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.h{position:absolute;bottom:-40px;color:var(--rose);animation:float var(--t,8s) linear forwards;opacity:0}
+@keyframes float{0%{transform:translate(0,0) scale(.6);opacity:0}12%{opacity:.8}100%{transform:translate(var(--dx,0),-110vh) scale(1.2);opacity:0}}
+@media (prefers-reduced-motion:reduce){.h{display:none}.caret{animation:none}}
+</style>
+</head>
+<body>
+<div id="hearts" aria-hidden="true"></div>
+<button id="music" type="button" aria-pressed="true">♪ music on</button>
+<main>
+  <section id="intro">
+    <h1>I wrote you<br>something.</h1>
+    <button id="open" type="button">Open the letter</button>
+  </section>
+  <section id="paper" aria-live="polite">
+    <h2 id="dear"></h2>
+    <div id="txt"></div><span class="caret" id="caret"></span>
+    <div id="sig"></div>
+    <button id="again" type="button">Read it again</button>
+  </section>
+</main>
+
+<script>
+(function(){
+  /* ---- EDIT THESE ---- */
+  var HER_NAME = "Anuska";            // e.g. "Priya" (leave empty for just "Dear you,")
+  var SIGN_OFF = "Yours, Adi";
+  var LETTER = ["When I first met you, I had no idea I was gonna get this attached. As the days went by, I could feel myself slowly falling in love with you.",
+  " I think about you all the time from the moment I wake up to the moment I fall asleep. When I think about you, I realize that you are the one that holds the key to my heart. ",
+  "I know for a fact we are meant for each other. Seeing your smile literally changes my whole day, Just know I will never let go of you and my feelings will never disappear. I wish I was able to explain how wonderful you are to me, how can just look at you and never get tired of your beauty. How the sounds of your voice gives me butterflies. How hearing your laugh makes me smile I wish I could also tell you how much I love you but you have me loss of words. And even if I could put the words together to tell you these things it wouldn't come anywhere near to show you how much you mean to me. i may not be the most perfect boyfrind or the most amazing but i'll put my all into our reltion "
+   
+  ];
+  var SPEED = 42;               // milliseconds per letter (smaller = faster)
+  /* -------------------- */
+
+  var $=function(id){return document.getElementById(id)};
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var txt=$('txt'), caret=$('caret'), sig=$('sig'), again=$('again'), typing=0;
+
+  // floating hearts
+  var hbox=$('hearts'), hs=['♥','♡','♥'];
+  function heart(){
+    var h=document.createElement('div'); h.className='h'; h.textContent=hs[Math.floor(Math.random()*3)];
+    h.style.left=(Math.random()*96)+'vw'; h.style.fontSize=(14+Math.random()*26)+'px';
+    h.style.setProperty('--t',(7+Math.random()*6)+'s'); h.style.setProperty('--dx',(Math.random()*80-40)+'px');
+    h.style.color=['#ff4f7b','#c9a8ff','#ffd6e0'][Math.floor(Math.random()*3)];
+    hbox.appendChild(h); setTimeout(function(){h.remove()},13500);
+  }
+  if(!reduce){ for(var i=0;i<6;i++) setTimeout(heart,i*350); setInterval(heart,900); }
+
+  // soft music-box tune (original melody)
+  var ac=null, master=null, on=true, step=0;
+  var N={C:523.25,D:587.33,E:659.25,G:783.99,A:880,c:1046.5,B:987.77};
+  var tune=['G','E','C','E','G','c','A','G','E','D','E','G','D','C','D','E',
+            'G','A','c','A','G','E','D','E','C','E','G','E','D','C','D','C'];
+  function note(f,t,len,vol){
+    var o=ac.createOscillator(), g=ac.createGain(); o.type='triangle'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.015); g.gain.exponentialRampToValueAtTime(.0008,t+len);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t+len+.05);
+  }
+  function startMusic(){
+    try{
+      ac=new (window.AudioContext||window.webkitAudioContext)();
+      master=ac.createGain(); master.gain.value=.4;
+      var dl=ac.createDelay(); dl.delayTime.value=.45; var fb=ac.createGain(); fb.gain.value=.4;
+      master.connect(ac.destination); master.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(ac.destination);
+      var beat=.62, t0=ac.currentTime+.1;      // beat = seconds per note (smaller = faster)
+      (function sched(){
+        while(t0<ac.currentTime+1.5){
+          var n=tune[step%tune.length]; note(N[n],t0,2.2,.16);
+          if(step%4===0) note(N[n]/2,t0,2.8,.1);
+          t0+=beat; step++;
+        }
+        setTimeout(sched,300);
+      })();
+    }catch(e){}
+  }
+  $('music').addEventListener('click',function(){
+    if(!ac) return; on=!on; if(on){ac.resume()}else{ac.suspend()}
+    this.textContent=on?'♪ music on':'♪ music off'; this.setAttribute('aria-pressed',on);
+  });
+
+  // typing
+  function type(){
+    var run=++typing; txt.textContent=''; sig.classList.remove('show'); again.classList.remove('show');
+    caret.style.display='inline-block'; sig.textContent=SIGN_OFF;
+    var full=LETTER.join('\n\n'); var i=0;
+    if(reduce){ txt.textContent=full; done(); return; }
+    (function step(){
+      if(run!==typing) return;
+      if(i>=full.length){ done(); return; }
+      var ch=full.charAt(i++); txt.textContent+=ch;
+      if(i%30===0) window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+      var d=SPEED+Math.random()*30;
+      if('.!?'.indexOf(ch)>-1) d+=520; else if(ch===',') d+=220; else if(ch==='\n') d+=380;
+      setTimeout(step,d);
+    })();
+  }
+  function done(){
+    caret.style.display='none'; sig.classList.add('show'); again.classList.add('show');
+    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+  }
+  $('dear').textContent='Dear '+(HER_NAME||'you')+',';
+  $('open').addEventListener('click',function(){
+    $('intro').style.display='none'; $('paper').style.display='block'; $('music').style.display='block';
+    window.scrollTo(0,0); startMusic(); setTimeout(type,700);
+  });
+  again.addEventListener('click',function(){window.scrollTo(0,0);type()});
+})();
+</script>
+</body>
+</html>

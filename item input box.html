@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+
+        input,
+        button {
+            font-size: 16px;
+            margin: 5px;
+            padding: 8px;
+        }
+
+        #boxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .box {
+            align-items: center;
+            border: 2px solid black;
+            box-sizing: border-box;
+            display: flex;
+            height: 60px;
+            justify-content: center;
+            text-align: center;
+            width: 60px;
+        }
+    </style>
+    <script>
+        function createBoxes() {
+            const valueA = Number(document.getElementById("valueA").value);
+            const valueB = Number(document.getElementById("valueB").value);
+            const boxes = document.getElementById("boxes");
+
+            boxes.innerHTML = "";
+             if (!Number.isInteger(valueA) || !Number.isInteger(valueB) || valueB < 0) {
+                alert("Please enter whole numbers. B must be 0 or greater.");
+                return;
+            }
+
+           
+
+            for (let count = 0; count < valueB; count++) {
+                const box = document.createElement("input");
+                box.className = "box";
+                box.type = "number";
+                box.value = valueA;
+                box.addEventListener("input", function () {
+                    const allBoxes = boxes.querySelectorAll(".box");
+
+                    for (let next = count + 1; next < allBoxes.length; next++) {
+                        allBoxes[next].value = box.value;
+                    }
+                });
+                boxes.appendChild(box);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Box Generator</h1>
+
+    <label>
+        Value A:
+        <input type="number" id="valueA" placeholder="12">
+    </label>
+    <label>
+        Number of boxes (B):
+        <input type="number" id="valueB" placeholder="6">
+    </label>
+    <button type="button" onclick="createBoxes()">Create boxes</button>
+
+    <div id="boxes"></div>
+
+</body>
+</html>

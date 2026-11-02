@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Toe</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+    }
+
+    .game {
+      width: 320px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: 28px;
+    }
+
+    .status {
+      margin-bottom: 16px;
+      font-size: 18px;
+      min-height: 24px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .cell {
+      width: 100%;
+      aspect-ratio: 1;
+      font-size: 36px;
+      font-weight: bold;
+      border: 2px solid #333;
+      background: white;
+      cursor: pointer;
+    }
+
+    .cell:hover {
+      background: #f0f0f0;
+    }
+
+    .restart {
+      margin-top: 18px;
+      padding: 10px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background: #111;
+      color: white;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game">
+    <h1>Tic Tac Toe</h1>
+    <div class="status" id="status">Player X turn</div>
+
+    <div class="board" id="board"></div>
+
+    <button class="restart" id="restart">Restart</button>
+  </div>
+
+  <script>
+    const board = document.getElementById('board');
+    const status = document.getElementById('status');
+    const restartBtn = document.getElementById('restart');
+
+    let cells = Array(9).fill('');
+    let currentPlayer = 'X';
+    let gameOver = false;
+
+    const winPatterns = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+
+    function renderBoard() {
+      board.innerHTML = '';
+
+      cells.forEach((value, index) => {
+        const cell = document.createElement('button');
+        cell.className = 'cell';
+        cell.textContent = value;
+        cell.disabled = value !== '' || gameOver;
+        cell.addEventListener('click', () => makeMove(index));
+        board.appendChild(cell);
+      });
+    }
+
+    function checkWinner() {
+      for (const pattern of winPatterns) {
+        const [a, b, c] = pattern;
+        if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
+          return cells[a];
+        }
+      }
+      return null;
+    }
+
+    function makeMove(index) {
+      if (cells[index] || gameOver) return;
+
+      cells[index] = currentPlayer;
+      renderBoard();
+
+      const winner = checkWinner();
+      if (winner) {
+        status.textContent = `Player ${winner} wins!`;
+        gameOver = true;
+        return;
+      }
+
+      if (cells.every(cell => cell !== '')) {
+        status.textContent = "It's a draw!";
+        gameOver = true;
+        return;
+      }
+
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      status.textContent = `Player ${currentPlayer} turn`;
+    }
+
+    function restartGame() {
+      cells = Array(9).fill('');
+      currentPlayer = 'X';
+      gameOver = false;
+      status.textContent = 'Player X turn';
+      renderBoard();
+    }
+
+    restartBtn.addEventListener('click', restartGame);
+    renderBoard();
+  </script>
+</body>
+</html>

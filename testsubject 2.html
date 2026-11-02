@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>revenue</title>
+</head>
+<body>
+    <h1>revenue rate rule master</h1>
+    <h4>rate rule details</h4>
+    <h1>occupancy based rate adjustment</h1>
+    <table border="1">
+        <tr>
+            <th>occupancy from (%)</th>
+            <th>occupancy to (%)</th>
+            <th>rate adjustment</th>
+            <th>adjustment type</th>
+            <th>action</th>
+        </tr>
+        <tr>
+            <td><label></label>
+    <input type="text" >
+</td>
+            <td>0</td>
+            <td>30</td>
+            <td><label for="status">decrease</label>
+
+<select id="status" name="status">
+    <option value="">-- Select karein --</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+    <option value="pending">Pending</option>
+</select></td> 
+            <td></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>1</td>
+            <td>20</td>
+            <td><label for="status">base rate</label>
+
+<select id="status" name="status">
+    <option value="">-- Select karein --</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+    <option value="pending">Pending</option>
+</select></td>
+            <td>$5.00</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>rule 1</td>
+            <td>rule 1 description</td>
+            <td><label for="status">increase</label>
+
+<select id="status" name="status">
+    <option value="">-- Select karein --</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+    <option value="pending">Pending</option>
+</select></td>
+            <td>10%</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>rule 2</td>
+            <td>rule 2 description</td>
+            <td><label for="status">increase</label>
+
+<select id="status" name="status">
+    <option value="">-- Select karein --</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+    <option value="pending">Pending</option>
+</select></td>
+            <td>$5.00</td>     
+    </tr>
+
+    </table>
+    <h1>rate rules master list</h1>
+
+    <table border="2">
+        <tr>
+            <th>rule name</th>
+            <th>date from</th>
+            <th>date to</th>
+            <th>no of ranges</th>
+            <th>status</th>
+            <th>created by</th>
+            <th>created date</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>30</td>
+            <td>-20</td>
+            <td>%  decrease</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>1</td>
+            <td>20</td>
+            <td>fixed amount</td>
+            <td>$5.00</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>rule 1</td>
+            <td>rule 1 description</td>
+            <td>percentage</td>
+            <td>10%</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>rule 2</td>
+            <td>rule 2 description</td>
+            <td>fixed amount</td>
+            <td>$5.00</td>     
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    
+</body>
+</html>

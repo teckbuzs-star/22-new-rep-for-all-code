@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factorial Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #4caf50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Factorial Calculator</h2>
+        <input type="number" id="number" placeholder="Enter a number" min="0">
+        <button onclick="calculateFactorial()">Calculate</button>
+        <p id="result">Result will appear here</p>
+    </div>
+
+    <script>
+        function calculateFactorial() {
+            const input = document.getElementById("number").value;
+            const result = document.getElementById("result");
+
+            if (input === "") {
+                result.textContent = "Please enter a number.";
+                return;
+            }
+
+            const n = Number(input);
+
+            if (!Number.isInteger(n) || n < 0) {
+                result.textContent = "Please enter a valid non-negative integer.";
+                return;
+            }
+
+            let factorial = 1;
+
+            for (let i = 2; i <= n; i++) {
+                factorial *= i;
+            }
+
+            result.textContent = `Factorial of ${n} is ${factorial}`;
+        }
+    </script>
+</body>
+</html>
